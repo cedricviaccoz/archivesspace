@@ -58,8 +58,8 @@ else
 end
 
 
-def get_mets(rec)
-  get_xml("/repositories/#{$repo_id}/digital_objects/mets/#{rec.id}.xml")
+def get_mets(rec, dmd = "mods")
+  get_xml("/repositories/#{$repo_id}/digital_objects/mets/#{rec.id}.xml?dmd=#{dmd}")
 end
 
 
@@ -148,6 +148,15 @@ def digital_object_note_set
   ["summary", "bioghist", "accessrestrict", "userestrict", "custodhist", "dimensions", "edition", "extent", "altformavail", "originalsloc", "note", "acqinfo", "inscription", "langmaterial", "legalstatus", "physdesc", "prefercite", "processinfo", "relatedmaterial"].map do |type|
     build(:json_note_digital_object, {
             :publish => true,
+            :type => type
+          })
+  end
+end
+
+def unpublished_extent_note_set
+  ["dimensions", "physdesc"].map do |type|
+    build(:json_note_digital_object, {
+            :publish => false,
             :type => type
           })
   end

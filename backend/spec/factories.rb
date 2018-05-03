@@ -124,6 +124,7 @@ FactoryBot.define do
       resource_id nil
       archival_object_id nil
       dimensions { generate(:alphanumstr) }
+      physical_details { generate(:alphanumstr) }
     end
 
     factory :archival_object do
@@ -370,6 +371,14 @@ FactoryBot.define do
     dates { few_or_none(:json_date) }
   end
 
+  factory :json_digital_object_no_lang, class: JSONModel(:digital_object) do
+    title { "Digital Object #{generate(:generic_title)}" }
+    digital_object_id { generate(:alphanumstr) }
+    extents { [build(:json_extent)] }
+    file_versions { few_or_none(:json_file_version) }
+    dates { few_or_none(:json_date) }
+  end
+
   factory :json_digital_object_component, class: JSONModel(:digital_object_component) do
     component_id { generate(:alphanumstr) }
     title { "Digital Object Component #{generate(:generic_title)}" }
@@ -412,6 +421,7 @@ FactoryBot.define do
     number { generate(:number) }
     extent_type { generate(:extent_type) }
     dimensions { generate(:alphanumstr) }
+    physical_details { generate(:alphanumstr) }
   end
 
   factory :json_file_version, class: JSONModel(:file_version) do
@@ -569,8 +579,17 @@ FactoryBot.define do
     org_code { generate(:alphanumstr) }
     image_url { generate(:url) }
     url { generate(:url) }
+    country { 'US' }
   end
 
+  factory :json_repo_without_country, class: JSONModel(:repository) do
+    repo_code { generate(:repo_code) }
+    name { generate(:generic_description) }
+    org_code { generate(:alphanumstr) }
+    image_url { generate(:url) }
+    url { generate(:url) }
+    country { nil }
+  end
 
   factory :json_repo_with_agent, class: JSONModel(:repository_with_agent) do
     repository { build(:json_repo) }
