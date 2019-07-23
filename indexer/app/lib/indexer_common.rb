@@ -110,6 +110,16 @@ class IndexerCommon
     ].uniq
   end
 
+  def generate_permutations_for_display_string(display_string)
+    return [] if display_string.nil?
+
+    [
+      display_string,
+      display_string.gsub(/[[:punct:]]+/, ""),
+      display_string.gsub('&', 'and')
+    ].uniq
+  end
+
 
   # Isolate leading alpha and numeric values to create a sortable string
   def self.generate_sort_string_for_identifier(identifier, size = 255)
@@ -522,6 +532,9 @@ class IndexerCommon
           doc['collection_identifier_stored_u_sstr'] = record['record']['collection'].map {|collection| collection['identifier']}
           doc['collection_identifier_u_stext'] = record['record']['collection'].map {|collection|
             IndexerCommon.generate_permutations_for_identifier(collection['identifier'])
+          }.flatten
+          doc['collection_display_string_u_stext'] = record['record']['collection'].map {|collection|
+            IndexerCommon.generate_permutations_for_display_string(collection['display_string'])
           }.flatten
         end
 
